@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每周工资统计 - 网站首页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background-color: #f8f9fa;
+            padding: 15px 30px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        nav ul li a:hover {
+            background-color: #667eea;
+            color: white;
+        }
+
+        nav ul li a.active {
+            background-color: #667eea;
+            color: white;
+        }
+
+        main {
+            padding: 30px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .day-input {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .day-input:hover {
+            background-color: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .day-input label {
+            width: 120px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .day-input input {
+            flex: 1;
+            padding: 12px;
+            width: 120px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .day-input input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .day-input span {
+            margin-left: 15px;
+            color: #666;
+        }
+
+        .buttons {
+            margin: 30px 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn {
+            background-color: #28a745;
+            color: white;
+            flex: 1;
+        }
+
+        .save-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .clear-btn {
+            background-color: #dc3545;
+            color: white;
+            flex: 1;
+        }
+
+        .clear-btn:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            color: white;
+        }
+
+        .result p {
+            font-size: 1.3em;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result p:first-child {
+            margin-top: 0;
+        }
+
+        .result .total {
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .total-value {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 4px;
+        }
+
+        .about-content {
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .about-content h2 {
+            color: #667eea;
+            margin: 20px 0 10px 0;
+        }
+
+        .about-content ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .about-content li {
+            margin: 10px 0;
+        }
+
+        .feature-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .day-input {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .day-input label {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .day-input input {
+                width: 100%;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .result p {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .result .total {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 每周工资统计</h1>
+            <p>简单、高效、专业的工资计算工具</p>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="#home" class="active" onclick="showPage('home')">🏠 首页</a></li>
+                <li><a href="#about" onclick="showPage('about')">📖 关于</a></li>
+            </ul>
+        </nav>
+        
+        <main>
+            <div id="home" class="page active">
+                <div class="day-input">
+                    <label>周一：</label>
+                    <input type="number" id="monday" min="0" max="24" step="0.5" value="0" onchange="calculateTotal()">
+                    <span>小时</span>
+                </div>
+                
+                <div class="day-input">
+                    <label>周二：</label>
+                    <input type="number" id="tuesday" min="0" max="24" step="0.5" value="0" onchange="calculateTotal()">
+                    <span>小时</span>
+                </div>
+                
+                <div class="day-input">
+                    <label>周三：</label>
+                    <input type="number" id="wednesday" min="0" max="24" step="0.5" value="0" onchange="calculateTotal()">
+                    <span>小时</span>
+                </div>
+                
+                <div class="day-input">
+                    <label>周四：</label>
+                    <input type="number" id="thursday" min="0" max="24" step="0.5" value="0" onchange="calculateTotal()">
+                    <span>小时</span>
+                </div>
+                
+                <div class="day-input">
+                    <label>周五：</label>
+                    <input type="number" id="friday" min="0" max="24" step="0.5" value="0" onchange="calculateTotal()">
+                    <span>小时</span>
+                </div>
+                
+                <div class="day-input">
+                    <label>周六：</label>
+                    <input type="number" id="saturday" min="0" max="24" step="0.5" value="0" onchange="calculateTotal()">
+                    <span>小时</span>
+                </div>
+                
+                <div class="day-input">
+                    <label>周日：</label>
+                    <input type="number" id="sunday" min="0" max="24" step="0.5" value="0" onchange="calculateTotal()">
+                    <span>小时</span>
+                </div>
+                
+                <div class="buttons">
+                    <button class="save-btn" onclick="saveData()">💾 保存统计</button>
+                    <button class="clear-btn" onclick="clearData()">🗑️ 清除统计</button>
+                </div>
+                
+                <div class="result">
+                    <p>
+                        <span>时薪</span>
+                        <span class="total-value">10 元/小时</span>
+                    </p>
+                    <p>
+                        <span>总上班时间</span>
+                        <span class="total" id="totalHours">0</span>
+                        <span>小时</span>
+                    </p>
+                    <p>
+                        <span>总工资</span>
+                        <span class="total" id="totalWage">0</span>
+                        <span>元</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div id="about" class="page">
+                <div class="about-content">
+                    <h2>👋 欢迎使用每周工资统计</h2>
+                    <p>这是一个简单易用的每周工资计算工具，帮助您轻松统计每周的工作时间和应得工资。</p>
+                    
+                    <div class="feature-card">
+                        <h3>✨ 主要功能</h3>
+                        <ul>
+                            <li><strong>每日工时记录</strong> - 记录周一到周日的每日工作小时数</li>
+                            <li><strong>实时计算</strong> - 每改变一次上班时间，总工资自动更新</li>
+                            <li><strong>数据保存</strong> - 支持本地存储，关闭浏览器后数据不丢失</li>
+                            <li><strong>清除统计</strong> - 一键清除所有统计数据</li>
+                        </ul>
+                    </div>
+                    
+                    <h2>📌 使用说明</h2>
+                    <ul>
+                        <li>在每个工作日的输入框中输入当天的工作小时数</li>
+                        <li>系统会自动计算并显示总工作时间和总工资</li>
+                        <li>点击"保存统计"按钮可以将数据保存到本地</li>
+                        <li>点击"清除统计"按钮可以清空所有数据</li>
+                        <li>下次访问时，上次保存的数据会自动加载</li>
+                    </ul>
+                    
+                    <div class="feature-card">
+                        <h3>⚙️ 技术特点</h3>
+                        <ul>
+                            <li><strong>跨浏览器兼容</strong> - 支持所有现代浏览器</li>
+                            <li><strong>响应式设计</strong> - 适配电脑和手机设备</li>
+                            <li><strong>无需后端</strong> - 纯前端实现，部署简单</li>
+                            <li><strong>离线可用</strong> - 保存后可在离线状态下查看</li>
+                        </ul>
+                    </div>
+                    
+                    <h2>💡 注意事项</h2>
+                    <ul>
+                        <li>时薪固定为10元/小时</li>
+                        <li>每天最多输入24小时</li>
+                        <li>支持0.5小时的增量输入</li>
+                        <li>数据存储在浏览器本地，请定期保存重要数据</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2026 每周工资统计网站 | 使用 ❤️ 和 JavaScript 构建</p>
+        </footer>
+    </div>
+    
+    <script>
+        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+        function calculateTotal() {
+            try {
+                const hourlyRate = 10;
+                let totalHours = 0;
+                
+                days.forEach(day => {
+                    const hours = parseFloat(document.getElementById(day).value) || 0;
+                    totalHours += hours;
+                });
+                
+                const totalWage = totalHours * hourlyRate;
+                
+                document.getElementById('totalHours').textContent = totalHours.toFixed(1);
+                document.getElementById('totalWage').textContent = totalWage.toFixed(2);
+            } catch (error) {
+                console.error('计算总工资时出错:', error);
+            }
+        }
+
+        function saveData() {
+            try {
+                const data = {};
+                days.forEach(day => {
+                    data[day] = parseFloat(document.getElementById(day).value) || 0;
+                });
+                
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem('wageData', JSON.stringify(data));
+                    showNotification('数据已保存', 'success');
+                } else {
+                    showNotification('您的浏览器不支持本地存储，数据无法保存', 'error');
+                }
+            } catch (error) {
+                console.error('保存数据时出错:', error);
+                showNotification('保存数据时出错，请刷新页面重试', 'error');
+            }
+        }
+
+        function clearData() {
+            try {
+                if (confirm('确定要清除所有数据吗？')) {
+                    days.forEach(day => {
+                        document.getElementById(day).value = 0;
+                    });
+                    
+                    if (typeof localStorage !== 'undefined') {
+                        localStorage.removeItem('wageData');
+                    }
+                    
+                    calculateTotal();
+                    showNotification('数据已清除', 'success');
+                }
+            } catch (error) {
+                console.error('清除数据时出错:', error);
+                showNotification('清除数据时出错，请刷新页面重试', 'error');
+            }
+        }
+
+        function loadData() {
+            try {
+                if (typeof localStorage !== 'undefined') {
+                    const savedData = localStorage.getItem('wageData');
+                    if (savedData) {
+                        try {
+                            const data = JSON.parse(savedData);
+                            days.forEach(day => {
+                                if (data[day] !== undefined) {
+                                    document.getElementById(day).value = data[day];
+                                }
+                            });
+                            calculateTotal();
+                        } catch (parseError) {
+                            console.error('解析保存的数据时出错:', parseError);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('加载数据时出错:', error);
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                background-color: ${type === 'success' ? '#28a745' : '#dc3545'};
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 2000);
+        }
+
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            const navLinks = document.querySelectorAll('nav ul li a');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.getElementById(pageId).classList.add('active');
+            
+            const activeLink = document.querySelector(`nav ul li a[href="#${pageId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            calculateTotal();
+        });
+    </script>
+</body>
+</html>
